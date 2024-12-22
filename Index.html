@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geography Trivia Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f8ff;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .question {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .answers {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .answer-button {
+            padding: 10px;
+            margin: 5px 0;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background-color 0.3s;
+        }
+
+        .answer-button:hover {
+            background-color: #45a049;
+        }
+
+        .result {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+
+        .score {
+            font-size: 22px;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+
+        .next-btn {
+            padding: 10px;
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background-color 0.3s;
+            margin-top: 20px;
+        }
+
+        .next-btn:hover {
+            background-color: #0b7dda;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Geography Trivia Game</h1>
+        <div class="question">What is the capital of France?</div>
+        <div class="answers">
+            <button class="answer-button" onclick="checkAnswer('A')">A) Paris</button>
+            <button class="answer-button" onclick="checkAnswer('B')">B) Berlin</button>
+            <button class="answer-button" onclick="checkAnswer('C')">C) Madrid</button>
+            <button class="answer-button" onclick="checkAnswer('D')">D) Rome</button>
+        </div>
+        <div class="result"></div>
+        <button class="next-btn" onclick="nextQuestion()">Next Question</button>
+        <div class="score">Score: <span id="score">0</span></div>
+    </div>
+
+    <script>
+        let score = 0;
+        let currentQuestion = 0;
+
+        const questions = [
+            {
+                question: "What is the capital of France?",
+                correctAnswer: "A",
+                answers: {
+                    A: "Paris",
+                    B: "Berlin",
+                    C: "Madrid",
+                    D: "Rome"
+                }
+            },
+            {
+                question: "Which country is known as the Land of the Rising Sun?",
+                correctAnswer: "B",
+                answers: {
+                    A: "China",
+                    B: "Japan",
+                    C: "India",
+                    D: "South Korea"
+                }
+            },
+            {
+                question: "Which country has the largest population?",
+                correctAnswer: "C",
+                answers: {
+                    A: "USA",
+                    B: "India",
+                    C: "China",
+                    D: "Russia"
+                }
+            },
+            {
+                question: "Which continent is the Sahara Desert located in?",
+                correctAnswer: "D",
+                answers: {
+                    A: "Asia",
+                    B: "Australia",
+                    C: "North America",
+                    D: "Africa"
+                }
+            }
+        ];
+
+        function loadQuestion() {
+            const question = questions[currentQuestion];
+            document.querySelector('.question').textContent = question.question;
+            const answers = question.answers;
+            document.querySelector('.answer-button:nth-child(1)').textContent = `A) ${answers.A}`;
+            document.querySelector('.answer-button:nth-child(2)').textContent = `B) ${answers.B}`;
+            document.querySelector('.answer-button:nth-child(3)').textContent = `C) ${answers.C}`;
+            document.querySelector('.answer-button:nth-child(4)').textContent = `D) ${answers.D}`;
+            document.querySelector('.result').textContent = "";
+        }
+
+        function checkAnswer(selectedAnswer) {
+            const correctAnswer = questions[currentQuestion].correctAnswer;
+            const resultElement = document.querySelector('.result');
+
+            if (selectedAnswer === correctAnswer) {
+                resultElement.textContent = "Correct!";
+                resultElement.style.color = "green";
+                score++;
+                document.getElementById("score").textContent = score;
+            } else {
+                resultElement.textContent = "Wrong!";
+                resultElement.style.color = "red";
+            }
+
+            // Disable answer buttons after answering
+            const buttons = document.querySelectorAll('.answer-button');
+            buttons.forEach(button => {
+                button.disabled = true;
+            });
+        }
+
+        function nextQuestion() {
+            currentQuestion++;
+            if (currentQuestion < questions.length) {
+                loadQuestion();
+                // Enable answer buttons for next question
+                const buttons = document.querySelectorAll('.answer-button');
+                buttons.forEach(button => {
+                    button.disabled = false;
+                });
+            } else {
+                // End the game and show final score
+                document.querySelector('.question').textContent = "Game Over!";
+                document.querySelector('.answers').innerHTML = "";
+                document.querySelector('.next-btn').style.display = "none";
+                document.querySelector('.result').textContent = `Your final score is: ${score}`;
+            }
+        }
+
+        // Initialize the first question
+        loadQuestion();
+    </script>
+</body>
+</html>
